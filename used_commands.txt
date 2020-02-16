@@ -1,0 +1,19 @@
+celery -A app_name worker -l info                              --- celery running
+celery -A app_name beat -l INFO                                --- celery beat running
+docker ps -a                                                   --- docker process review
+docker-compose --version                                       --- docker-compose version checking
+sudo service rabbitmq status                                   --- some service status checking
+docker-compose -f dc.yml up -d                                 --- docker yml file running
+docker-compose -f dc.yml ps                                    --- docker compose process review
+sudo service rabbitmq-server stop                              --- some service stopping
+sudo apt-get remove --auto-remove rabbitmq-server              --- removing services
+sudo apt-get --purge remove postgresql                         --- remove postgres 
+dpkg -l | grep postgres                                        --- software that depends on Postgres
+docker exec -it rabbitmq bash                                  --- check the cluster status
+docker-compose -f dc.yml down                                  --- contaienr stopping
+sudo systemctl status docker                                   --- status checking
+id -nG                                                         --- which commands we can run without sudo
+pip install -r requirements.txt                                --- requirements installing
+
+
+
