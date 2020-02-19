@@ -1,5 +1,8 @@
 import os
 
+
+from celery.schedules import crontab
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_extensions',
+    'django_celery_beat',
     'debug_toolbar',
 
     'account',
@@ -131,6 +135,14 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': 'memcached',
     }
+}
+
+CELERY_BROKER_URL = 'rabbitmq'
+CELERY_BEAT_SCHEDULE = {
+ 'print-word-every-minute': {
+     'task': 'account.tasks.print_word',
+     'schedule': crontab(),
+    },
 }
 
 try:
