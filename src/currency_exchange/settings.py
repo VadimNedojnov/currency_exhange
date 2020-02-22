@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
     'account',
+    'currency',
 ]
 
 MIDDLEWARE = [
@@ -137,12 +138,16 @@ CACHES = {
     }
 }
 
-CELERY_BROKER_URL = 'rabbitmq'
+# CELERY_BROKER_URL = 'rabbitmq'
 CELERY_BEAT_SCHEDULE = {
- 'print-word-every-minute': {
-     'task': 'account.tasks.print_word',
-     'schedule': crontab(),
+    'print-word-every-minute': {
+        'task': 'account.tasks.print_word',
+        'schedule': crontab(),
     },
+    'parse-rates': {
+        'task': 'currency.tasks.parse_rates',
+        'schedule': crontab(),
+    }
 }
 
 try:

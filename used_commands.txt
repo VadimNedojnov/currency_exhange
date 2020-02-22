@@ -1,5 +1,5 @@
-celery -A app_name worker -l info                              --- celery running
-celery -A app_name beat -l INFO                                --- celery beat running
+celery -A currency_exchange worker -l info                              --- celery running
+celery -A currency_exchange beat -l INFO                                --- celery beat running
 docker ps -a                                                   --- docker process review
 docker-compose --version                                       --- docker-compose version checking
 sudo service rabbitmq status                                   --- some service status checking
