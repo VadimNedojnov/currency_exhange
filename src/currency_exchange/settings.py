@@ -134,11 +134,17 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'memcached',
+        'LOCATION': f'{os.environ["MEMCACHED_HOST"]}:{os.environ["MEMCACHED_PORT"]}',
     }
 }
 
-# CELERY_BROKER_URL = 'rabbitmq'
+CELERY_BROKER_URL = 'amqp://{}:{}@{}:{}//'.format(
+    os.environ['RABBITMQ_DEFAULT_USER'],
+    os.environ['RABBITMQ_DEFAULT_PASS'],
+    os.environ['RABBITMQ_DEFAULT_HOST'],
+    os.environ['RABBITMQ_DEFAULT_PORT']
+)
+
 CELERY_BEAT_SCHEDULE = {
     'print-word-every-minute': {
         'task': 'account.tasks.print_word',
