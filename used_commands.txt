@@ -1,5 +1,5 @@
-celery -A app_name worker -l info                              --- celery running
-celery -A app_name beat -l INFO                                --- celery beat running
+celery -A currency_exchange worker -l info                     --- celery running
+celery -A currency_exchange beat -l INFO                       --- celery beat running
 docker ps -a                                                   --- docker process review
 docker-compose --version                                       --- docker-compose version checking
 sudo service rabbitmq status                                   --- some service status checking
@@ -14,6 +14,8 @@ docker-compose -f dc.yml down                                  --- contaienr sto
 sudo systemctl status docker                                   --- status checking
 id -nG                                                         --- which commands we can run without sudo
 pip install -r requirements.txt                                --- requirements installing
+docker logs -f nginx                                           --- docker logs
+
 
 
 

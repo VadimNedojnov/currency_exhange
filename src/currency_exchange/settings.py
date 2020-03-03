@@ -1,6 +1,9 @@
 import os
 
 
+from django.urls import reverse_lazy
+
+
 from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -34,6 +37,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
     'account',
+    'currency',
 ]
 
 MIDDLEWARE = [
@@ -124,8 +128,8 @@ INTERNAL_IPS = [
     # ...
 ]
 
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = reverse_lazy('index')
+LOGOUT_REDIRECT_URL = reverse_lazy('index')
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
@@ -133,16 +137,26 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'memcached',
+        'LOCATION': f'{os.environ["MEMCACHED_HOST"]}:{os.environ["MEMCACHED_PORT"]}',
     }
 }
 
-CELERY_BROKER_URL = 'rabbitmq'
+CELERY_BROKER_URL = 'amqp://{}:{}@{}:{}//'.format(
+    os.environ['RABBITMQ_DEFAULT_USER'],
+    os.environ['RABBITMQ_DEFAULT_PASS'],
+    os.environ['RABBITMQ_DEFAULT_HOST'],
+    os.environ['RABBITMQ_DEFAULT_PORT']
+)
+
 CELERY_BEAT_SCHEDULE = {
- 'print-word-every-minute': {
-     'task': 'account.tasks.print_word',
-     'schedule': crontab(),
+    'print-word-every-minute': {
+        'task': 'account.tasks.print_word',
+        'schedule': crontab(),
     },
+    'parse-rates': {
+        'task': 'currency.tasks.parse_rates',
+        'schedule': crontab(),
+    }
 }
 
 try:
