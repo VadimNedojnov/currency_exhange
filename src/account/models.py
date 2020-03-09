@@ -8,6 +8,6 @@ class User(AbstractUser):
 
 class Contact(models.Model):
     email = models.EmailField()
-    title = models.CharField(max_length=100)
-    text = models.CharField(max_length=1000)
+    title = models.CharField(max_length=256)
+    text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)

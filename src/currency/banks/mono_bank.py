@@ -13,7 +13,7 @@ def _mono():
     response_mono = requests.get(url)
     r_json = response_mono.json()
     for rate in r_json:
-        if rate['currencyCodeA'] in {840, 978} and rate['currencyCodeB'] in {980}:
+        if rate['currencyCodeA'] in {840, 978} and rate['currencyCodeB'] == 980:
             currency = mch.CURR_USD if rate['currencyCodeA'] == 840 else mch.CURR_EUR
             rate_kwargs = {
                 'currency': currency,

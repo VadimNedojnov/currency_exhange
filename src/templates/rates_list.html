@@ -1,30 +1,32 @@
 {% extends 'base.html' %}
 
-{% block title %}Rates List{% endblock %}
+{% block title %}Currency Exchange{% endblock title %}
 
 {% block content %}
 
-<br>
-<table style="width:70%">
-    <caption style="font-size:35px"><b>Rates List</b></caption>
-    <tr>
-        <th>ID</th>
-        <th>Created</th>
-        <th>Currency</th>
-        <th>Buy</th>
-        <th>Sale</th>
-        <th>Source</th>
-    </tr>
-    {% for rate in rates %}
-        <tr>
-            <td>{{ rate.id }}</td>
-            <td>{{ rate.created }}</td>
-            <td>{{ rate.get_currency_display }}</td>
-            <td>{{ rate.buy }}</td>
-            <td>{{ rate.sale }}</td>
-            <td>{{ rate.get_source_display }}</td>
-        </tr>
-    {% endfor %}
-</table>
-
+<div>
+    <table class="table table-bordered table-sm">
+        <caption>Rates List</caption>
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Created</th>
+                <th>Currency</th>
+                <th>Buy</th>
+                <th>Sale</th>
+                <th>Source</th>
+            </tr>
+        </thead>
+        {% for rate in rates %}
+            <tr>
+                <th>{{ rate.id }}</th>
+                <td>{{ rate.created }}</td>
+                <td>{{ rate.get_currency_display }}</td>
+                <td>{{ rate.buy }}</td>
+                <td>{{ rate.sale }}</td>
+                <td>{{ rate.get_source_display }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
 {% endblock %}
