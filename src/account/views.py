@@ -33,3 +33,8 @@ class MyProfile(UpdateView):
     queryset = User.objects.filter(is_active=True)
     fields = ('email', )
     success_url = reverse_lazy('index')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(id=self.request.user.id)
+
