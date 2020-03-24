@@ -1,35 +1,16 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from django.conf import settings
 
 
 from account.models import User, Contact
 from account.tasks import send_email_async
-# from account.forms import ContactForm
 
 
 class SignUp(CreateView):
-    model = User
     fields = ['username', 'email']
-    # form_class = UserCreationForm
-    # success_url = reverse_lazy('login')
+    success_url = reverse_lazy('index')
     template_name = 'registration/registration.html'
-
-
-# def contact(request):
-#     if request.method == "POST":
-#         form = ContactForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return HttpResponseRedirect(reverse_lazy('index'))
-#     else:
-#         form = ContactForm()
-#     return render(request,
-#                   'contact.html',
-#                   context={'form': form})
 
 
 class ContactCreateView(CreateView):
@@ -45,3 +26,15 @@ class ContactCreateView(CreateView):
         recipient_list = [form.instance.email, ]
         send_email_async.delay(subject, message, from_email, recipient_list)
         return super().form_valid(form)
+
+
+class MyProfile(UpdateView):
+    template_name = 'my_profile.html'
+    queryset = User.objects.filter(is_active=True)
+    fields = ('email', )
+    success_url = reverse_lazy('index')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(id=self.request.user.id)
+
