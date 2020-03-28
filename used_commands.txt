@@ -10,11 +10,12 @@ sudo apt-get remove --auto-remove rabbitmq-server              --- removing serv
 sudo apt-get --purge remove postgresql                         --- remove postgres 
 dpkg -l | grep postgres                                        --- software that depends on Postgres
 docker exec -it rabbitmq bash                                  --- check the cluster status
-docker-compose -f dc.yml down                                  --- contaienr stopping
+docker-compose -f dc.yml down                                  --- container stopping
 sudo systemctl status docker                                   --- status checking
 id -nG                                                         --- which commands we can run without sudo
 pip install -r requirements.txt                                --- requirements installing
 docker logs -f nginx                                           --- docker logs
+docker-compose -f dc.yml up -d --build                         --- build container
 
 
 
