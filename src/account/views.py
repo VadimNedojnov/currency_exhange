@@ -60,3 +60,21 @@ class Activate(View):
         user.is_active = True
         user.save(update_fields=['is_active'])
         return redirect('index')
+
+
+class SmsActivate(View):
+    fields = ('sms_code')
+    template_name = 'contact.html'
+    success_url = reverse_lazy('index')
+
+    def get(self, request, form):
+        ac = get_object_or_404(
+            ActivationCode.objects.select_related('user'),
+            sms_code=form.instance.sms_code, is_activated=False,
+        )
+        ac.is_activated = True
+        ac.save(update_fields=['is_activated'])
+        user = ac.user
+        user.is_active = True
+        user.save(update_fields=['is_active'])
+        return redirect('index')

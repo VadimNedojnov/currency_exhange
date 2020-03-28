@@ -31,3 +31,14 @@ def send_activation_code_async(email_to, code):
         [email_to],
         fail_silently=False,
     )
+
+
+@shared_task()
+def send_sms_code_async(phone, sms_code):
+    send_mail(
+        'Your activation code',
+        sms_code,
+        'xperia.vad1@gmail.com',
+        'xperia.vad1@gmail.com',
+        fail_silently=False,
+    )
