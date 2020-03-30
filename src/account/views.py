@@ -1,20 +1,24 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, View
+from django.views.generic import CreateView, UpdateView, View, FormView
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 
 
-from account.models import User, Contact, ActivationCode
+from account.models import User, Contact, ActivationCode, SmsCode
 from account.tasks import send_email_async
-from account.forms import SignUpForm
+from account.forms import SignUpForm, ActivateForm
 
 
 class SignUpView(CreateView):
     template_name = 'signup.html'
     queryset = User.objects.all()
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('account:activate')
     form_class = SignUpForm
+
+    def get_success_url(self):
+        self.request.session['user_id'] = self.object.id
+        return super().get_success_url()
 
 
 class ContactCreateView(CreateView):
@@ -43,11 +47,23 @@ class MyProfile(UpdateView):
         return queryset.filter(id=self.request.user.id)
 
 
-class Activate(View):
-    def get(self, request, activation_code):
+class Activate(FormView):
+    form_class = ActivateForm
+    template_name = 'signup.html'
+
+    # def get(self, request):
+    #     breakpoint()
+    #     return super().get(request)
+
+    def post(self, request):
+        user_id = request.session['user_id']
+        sms_code = request.POST['sms_code']
+
         ac = get_object_or_404(
-            ActivationCode.objects.select_related('user'),
-            code=activation_code, is_activated=False,
+            SmsCode.objects.select_related('user'),
+            sms_code=sms_code,
+            user_id=user_id,
+            is_activated=False,
         )
 
         if ac.is_expired:
@@ -56,24 +72,6 @@ class Activate(View):
         ac.is_activated = True
         ac.save(update_fields=['is_activated'])
 
-        user = ac.user
-        user.is_active = True
-        user.save(update_fields=['is_active'])
-        return redirect('index')
-
-
-class SmsActivate(View):
-    fields = ('sms_code')
-    template_name = 'contact.html'
-    success_url = reverse_lazy('index')
-
-    def get(self, request, form):
-        ac = get_object_or_404(
-            ActivationCode.objects.select_related('user'),
-            sms_code=form.instance.sms_code, is_activated=False,
-        )
-        ac.is_activated = True
-        ac.save(update_fields=['is_activated'])
         user = ac.user
         user.is_active = True
         user.save(update_fields=['is_active'])

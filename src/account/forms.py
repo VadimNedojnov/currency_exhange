@@ -2,7 +2,7 @@ from django import forms
 from django.shortcuts import redirect
 
 
-from account.models import User, ActivationCode
+from account.models import User
 
 
 class SignUpForm(forms.ModelForm):
@@ -11,7 +11,7 @@ class SignUpForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'phone', 'password', 'password2')
+        fields = ('email', 'username', 'phone', 'password', 'password2', 'phone')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -27,6 +27,11 @@ class SignUpForm(forms.ModelForm):
         user.is_active = False   # user cannot login
         user.save()
 
-        activation_code = ActivationCode.objects.get(user=user)
-        activation_code.send_sms_code()
-        return redirect('account:sms-activate')
+        sms_code = user.sms_codes.create()
+        sms_code.send_sms_code()
+        return user
+
+
+class ActivateForm(forms.Form):
+    sms_code = forms.CharField()
+    # user_id = forms.CharField(widget=forms.HiddenInput())

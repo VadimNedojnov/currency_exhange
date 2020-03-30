@@ -1,6 +1,6 @@
 from uuid import uuid4
 from datetime import datetime
-from random import randrange
+import random
 
 
 from django.db import models
@@ -34,7 +34,6 @@ class ActivationCode(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # code = models.CharField(max_length=128)
     code = models.UUIDField(default=uuid4, editable=False, unique=True)
-    sms_code = models.IntegerField(default=randrange(111111, 999999, 1), max_length=6)
     is_activated = models.BooleanField(default=False)
 
 
@@ -47,9 +46,26 @@ class ActivationCode(models.Model):
     def send_activation_code(self):
         send_activation_code_async.delay(self.user.email, self.code)
 
-    def send_sms_code(self):
-        send_sms_code_async.delay(self.user.phone, self.sms_code)
-
     # def save(self, *args, **kwargs):
     #     self.code = ... # GENERATE CODE
     #     super().save(*args, **kwargs)
+
+
+def generate_sms_code():
+    return random.randint(1000, 32000)
+
+
+class SmsCode(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sms_codes')
+    created = models.DateTimeField(auto_now_add=True)
+    code = models.PositiveSmallIntegerField(default=generate_sms_code)
+    is_activated = models.BooleanField(default=False)
+
+    @property
+    def is_expired(self):
+        now = datetime.now()
+        diff = now - self.created
+        return diff.days > 7
+
+    def send_sms_code(self):
+        send_sms_code_async.delay(self.user.phone, self.code)
