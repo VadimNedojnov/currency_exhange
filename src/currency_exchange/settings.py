@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_celery_beat',
     'django_filters',
-    'debug_toolbar',
     'rest_framework',
     'rest_framework_swagger',
+    'crispy_forms',
 
     # custom
     'account',
@@ -227,6 +227,8 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 try:
     from currency_exchange.settings_local import *  # noqa

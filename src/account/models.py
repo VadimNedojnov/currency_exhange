@@ -18,6 +18,17 @@ def avatar_path(instance, filename: str) -> str:
 
 class User(AbstractUser):
     avatar = models.ImageField(upload_to=avatar_path, null=True, blank=True, default=None)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=100)
+    street = models.CharField(max_length=100)
+    city = models.CharField(max_length=20)
+    index = models.CharField(max_length=10)
+    phone = models.CharField(max_length=20)
+    person_description = models.CharField(max_length=1024)
+    linkedin_link = models.CharField(max_length=200)
+    githab_link = models.CharField(max_length=200)
+    twitter_link = models.CharField(max_length=200)
+    facebook_link = models.CharField(max_length=200)
 
 
 class Contact(models.Model):
