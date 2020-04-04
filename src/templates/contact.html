@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}Contact{% endblock %}
 
 {% block content %}
 
 <form action="{% url 'account:contact' %}" method="post">
+    <div style="width:50%">
     {% csrf_token %}
-{{ form.as_p }}
+{{ form|crispy }}
     <input name="submit" type="submit">
+    </div>
 </form>
 
 {% endblock %}

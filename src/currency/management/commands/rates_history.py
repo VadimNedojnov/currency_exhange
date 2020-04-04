@@ -17,9 +17,10 @@ class Command(BaseCommand):
         for i in range(1, 1460):
             d = datetime.timedelta(days=-i)
             date = datetime.datetime.now() + d
-            date_in_list = str(date).split(' ')[0].split('-')
+            # date_in_list = str(date).split(' ')[0].split('-')
+            date_in_list = datetime.datetime.strftime(date, "%d.%m.%Y").split('.')
             url = f'https://api.privatbank.ua/p24api/exchange_rates?json&date=' \
-                  f'{date_in_list[2]}.{date_in_list[1]}.{date_in_list[0]}'
+                  f'{date_in_list[0]}.{date_in_list[1]}.{date_in_list[2]}'
             response_privat = requests.get(url).json()
             r_json = response_privat['exchangeRate']
             for rate in r_json:
@@ -27,7 +28,7 @@ class Command(BaseCommand):
                     if rate['currency'] in {'USD', 'EUR'}:
                         currency = mch.CURR_USD if rate['currency'] == 'USD' else mch.CURR_EUR
                         date_time_str = response_privat['date']
-                        if 'purchaseRate' and 'saleRate' in rate:
+                        if 'purchaseRate' in rate and 'saleRate' in rate:
                             rate_kwargs = {
                                 'currency': currency,
                                 'buy': Decimal(rate['purchaseRate']),

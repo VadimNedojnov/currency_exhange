@@ -5,7 +5,7 @@ services:
   # wsgi classwork
   backend:
     build: .
-    command: python src/manage.py runserver 0.0.0.0:8000
+    command: /bin/bash ./commands/wsgi/${SERVER}.sh
     container_name: backend
     restart: always
     env_file:
@@ -18,6 +18,7 @@ services:
       - ./:/srv/project
     ports:
       - "8000:8000"
+      - "8001:8001"
 
   celery:
     build: .
@@ -34,7 +35,7 @@ services:
 
   celerybeat:
     build: .
-    command: celery -A currency_exchange beat -l info --workdir=/srv/project/src
+    command: /bin/bash ./commands/start_celerybeat.sh
     container_name: celerybeat
     restart: always
     env_file:
