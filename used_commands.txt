@@ -16,6 +16,7 @@ id -nG                                                         --- which command
 pip install -r requirements.txt                                --- requirements installing
 docker logs -f nginx                                           --- docker logs
 docker-compose -f dc.yml up -d --build                         --- build container
+docker exec -it backend pytest ./src                           --- pytests start
 
 
 
