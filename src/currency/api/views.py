@@ -2,11 +2,24 @@ from rest_framework import generics
 from django_filters import rest_framework as filters
 from django_filters import DateFromToRangeFilter
 from django_filters.widgets import RangeWidget
+from rest_framework.pagination import PageNumberPagination
 
 
 from currency.api.serializers import RateSerializer, ContactSerializer
 from currency.models import Rate
 from account.models import Contact
+
+
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 1000
+    page_size_query_param = 'page_size'
+    max_page_size = 10000
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 
 class RateFilter(filters.FilterSet):
@@ -26,6 +39,8 @@ class RatesView(generics.ListCreateAPIView):
     serializer_class = RateSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = RateFilter
+    pagination_class = StandardResultsSetPagination
+    # pagination_class = LargeResultsSetPagination
 
 
 class RateView(generics.RetrieveUpdateDestroyAPIView):

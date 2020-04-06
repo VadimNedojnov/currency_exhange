@@ -28,6 +28,9 @@ class User(AbstractUser):
     twitter_link = models.CharField(max_length=200, null=True, blank=True, default=None)
     facebook_link = models.CharField(max_length=200, null=True, blank=True, default=None)
 
+    def __str__(self):
+        return str(self.__dict__)
+
 
 class Contact(models.Model):
     email = models.EmailField()

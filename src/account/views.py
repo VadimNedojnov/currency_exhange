@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, View
+from django.views.generic import CreateView, UpdateView, View, ListView
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from account.models import User, Contact, ActivationCode
 from account.tasks import send_email_async
 from account.forms import SignUpForm
+from currency.models import Rate
 
 
 class SignUpView(CreateView):
