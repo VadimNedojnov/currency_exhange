@@ -14,18 +14,26 @@
         </div>
         <p class="lead mb-5">{{ user.person_description }}</p>
         <div class="social-icons">
+          {% if user.linkedin_link %}
           <a href="{{ user.linkedin_link }}">
             <i class="fab fa-linkedin-in"></i>
           </a>
-          <a href="{{ user.github_link }}">
+          {% endif %}
+          {% if user.githab_link %}
+          <a href="{{ user.githab_link }}">
             <i class="fab fa-github"></i>
           </a>
+          {% endif %}
+          {% if user.twitter_link %}
           <a href="{{ user.twitter_link }}">
             <i class="fab fa-twitter"></i>
           </a>
+          {% endif %}
+          {% if user.facebook_link %}
           <a href="{{ user.facebook_link }}">
             <i class="fab fa-facebook-f"></i>
           </a>
+          {% endif %}
         </div>
       </div>
     </section>
