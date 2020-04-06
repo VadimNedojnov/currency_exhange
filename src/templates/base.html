@@ -1,4 +1,5 @@
 {% load static %}
+{% load compress %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,16 +13,21 @@
 
   <title>{% block title %}{% endblock title %}</title>
 
+  {% compress css %}
   <!-- Bootstrap core CSS -->
   <link href="{% static 'ln/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
-  <!-- Custom fonts for this template -->
-  <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
-  <link href="{% static 'ln/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
-
   <!-- Custom styles for this template -->
   <link href="{% static 'ln/css/resume.min.css' %}" rel="stylesheet">
+
+  <!-- Custom font for this template (1) -->
+  <link href="{% static 'ln/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+
+  {% endcompress %}
+
+  <!-- Custom fonts for this template (2) -->
+  <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
 
 </head>
 
@@ -93,6 +99,7 @@
     {% endblock content %}
   </div>
 
+  {% compress js %}
   <!-- Bootstrap core JavaScript -->
   <script src="{% static 'ln/vendor/jquery/jquery.min.js' %}"></script>
   <script src="{% static 'ln/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -102,6 +109,7 @@
 
   <!-- Custom scripts for this template -->
   <script src="{% static 'ln/js/resume.min.js' %}"></script>
+  {% endcompress %}
 
 </body>
 

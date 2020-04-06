@@ -56,3 +56,4 @@ django-rest-swagger==2.1.2
 pytest-django
 pytest-mock
 pytest-cov
+django_compressor
